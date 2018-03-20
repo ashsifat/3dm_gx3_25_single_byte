@@ -6,7 +6,7 @@ Adding and compiling:
 
 1. cd ~/catkin_ws/src
 
-2. git clone https://github.com/zarathustr/3dm_gx3_25_single_byte.git
+2. git clone https://github.com/ashsifat/3dm_gx3_25_single_byte.git
 
 3. rosdep install 3dm_gx3_25_single_byte
 
