@@ -17,7 +17,7 @@ Adding and compiling:
 
 Usage:
 
-rosrun 3dm_gx3_25_single_byte imu_3dm_gx3 _port:=/dev/ttyACM0
+rosrun 3dm_gx3_25_single_byte imu_3dm_gx3 _port:=/dev/ttyACM0 _baud:=921600
 
 
 This version is update with maximum baudrate and minuimum decimation for max speed
