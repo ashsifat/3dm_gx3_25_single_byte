@@ -17,11 +17,14 @@
 using namespace std;
 
 #define REPLY_LENGTH 4
+#define REPLY_SAMPLE_LENGTH 19
 
 boost::asio::serial_port* serial_port = 0;
 const char stop[3] = {'\xFA','\x75','\xB4'};
 char mode[4] = {'\xD4','\xA3','\x47','\x00'};
+char sample[20]={'\xDB', '\xA8', '\xB9', '\x01','\x00', '\x01','\x00', '\x03', '\x0F','\x11', '\x00', '\x0A', '\x00', '\x0A', '\x00','\x00','\x00','\x00','\x00','\x00' };
 unsigned char reply[REPLY_LENGTH];
+unsigned char reply_sample[REPLY_SAMPLE_LENGTH];
 std::string name;
 
 static float extract_float(unsigned char* addr)
@@ -107,7 +110,8 @@ int main(int argc, char** argv)
     }
 
   int baud;
-  n.param("baud", baud, 115200);
+//  n.param("baud", baud, 115200);
+  n.param("baud", baud, 921600);
 
   string frame_id;
   n.param("frame_id", frame_id, string("world"));
@@ -126,6 +130,17 @@ int main(int argc, char** argv)
   serial_port->set_option(flow_control);
   serial_port->set_option(parity);
   serial_port->set_option(stop_bits);
+
+  //set sample setting deciamtion
+  boost::asio::write(*serial_port, boost::asio::buffer(sample, 20));
+  boost::asio::read(*serial_port, boost::asio::buffer(reply_sample, REPLY_SAMPLE_LENGTH));
+  if (!validate_checksum(reply_sample, REPLY_SAMPLE_LENGTH))
+    {
+      ROS_ERROR("%s: failed to set deciamtion", name.c_str());
+//      if (serial_port->is_open())
+//        serial_port->close();
+//      reInitFlag = true;
+    }
 
   // Stop continous mode if it is running
   boost::asio::write(*serial_port, boost::asio::buffer(stop, 3));
@@ -235,9 +250,9 @@ int main(int argc, char** argv)
   sensor_msgs::Imu msg;
   sensor_msgs::MagneticField msg_mag;
 
-  ros::Publisher pub = n.advertise<sensor_msgs::Imu>("data_raw", 100);
-  ros::Publisher pub_mag = n.advertise<sensor_msgs::MagneticField>("mag", 100);
-
+  ros::Publisher pub = n.advertise<sensor_msgs::Imu>("data_raw", 10);
+  ros::Publisher pub_mag = n.advertise<sensor_msgs::MagneticField>("mag", 10);
+//  ros::Rate loop_rate(100);
   while (n.ok())
     {
       boost::asio::read(*serial_port, boost::asio::buffer(data, data_length));
