@@ -8,7 +8,7 @@ Adding and compiling:
 
 2. git clone https://github.com/ashsifat/3dm_gx3_25_single_byte.git
 
-3. rosdep install 3dm_gx3_25_single_byte
+3. rosdep install imu_3dm_gx3
 
 4. cd ..
 
@@ -17,7 +17,7 @@ Adding and compiling:
 
 Usage:
 
-rosrun 3dm_gx3_25_single_byte imu_3dm_gx3 _port:=/dev/ttyACM0 _baud:=921600
+rosrun imu_3dm_gx3 imu_3dm_gx3 _port:=/dev/ttyACM0 _baud:=921600
 
 
 This version is update with maximum baudrate and minuimum decimation for max speed
