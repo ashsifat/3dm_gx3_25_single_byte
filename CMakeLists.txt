@@ -98,6 +98,7 @@ catkin_package(
 ## Declare a cpp library
 add_executable(imu_3dm_gx3
   src/imu_3dm_gx3.cc
+  src/parse_tacttile2.cpp
 )
 
 ## Declare a cpp executable
